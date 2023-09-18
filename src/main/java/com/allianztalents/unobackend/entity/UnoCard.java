@@ -8,18 +8,18 @@ public class UnoCard {
     private int id;
     private Numeration numeration;
     private Color color;
-    private SpecialEffect spezialEffect;
+    private SpecialEffect specialEffect;
 
     public UnoCard(Color color, Numeration numeration) {
         this.color = color;
         this.numeration = numeration;
-        this.spezialEffect = null;
+        this.specialEffect = null;
     }
 
-    public UnoCard(Color color, SpecialEffect spezialEffect) {
+    public UnoCard(Color color, SpecialEffect specialEffect) {
         this.color = color;
         this.numeration = Numeration.SPECIAL_EFFECT;
-        this.spezialEffect = spezialEffect;
+        this.specialEffect = specialEffect;
     }
 
 }
