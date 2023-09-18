@@ -32,7 +32,7 @@ public class Game {
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private Player currentPlayer = new Player();
 
-  private Boolean clockwiseroation;
+  private Boolean clockwiseRotation = true;
 
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private CardDeck drawDeck = new CardDeck();

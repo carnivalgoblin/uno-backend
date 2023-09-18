@@ -1,8 +1,6 @@
 package com.allianztalents.unobackend.service;
 
-import com.allianztalents.unobackend.entity.Game;
-import com.allianztalents.unobackend.entity.Player;
-import com.allianztalents.unobackend.entity.Card;
+import com.allianztalents.unobackend.entity.*;
 import com.allianztalents.unobackend.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,8 @@ public class GameService {
 
   @Autowired
   private GameRepository gameRepository;
-
+  private DeckService deckService;
+  private ValidationService validationService;
 
   public Game insert(Game _game){
     return gameRepository.save(_game);
@@ -28,7 +27,14 @@ public class GameService {
 
   public Game createGame(List<Player> players) {
 
-    return null; // temporary
+    Game game = new Game();
+
+    game.setPlayers(players);
+
+    List<Card> deck = deckService.initializeDeck();
+    game.setDrawDeck((CardDeck) deck); //TODO Check which argument has to be used for this method
+
+    return null;
   }
 
   public Game joinGame(Long gameId, Player player) {

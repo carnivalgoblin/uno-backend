@@ -1,9 +1,12 @@
 package com.allianztalents.unobackend.controller;
 
 import com.allianztalents.unobackend.entity.Game;
+import com.allianztalents.unobackend.entity.Card;
+import com.allianztalents.unobackend.service.DeckService;
 import com.allianztalents.unobackend.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -12,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GameController {
   private final GameService gameService;
+  private final DeckService deckService;
 
   @PostMapping
   public Game startGame(@RequestBody Game _game){
@@ -21,6 +25,16 @@ public class GameController {
   @GetMapping
   public List<Game> getGame(){
     return gameService.getGame();
+  }
+
+  @GetMapping("/cards")
+  public List<Card> getAllCards(){
+    return deckService.getAllCards();
+  }
+
+  @GetMapping("/cards/{cardId}")
+  public Card getCardById(@Valid @PathVariable("cardId") long id){
+    return deckService.getCardById(id);
   }
 
 }
