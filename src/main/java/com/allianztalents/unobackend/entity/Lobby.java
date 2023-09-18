@@ -16,7 +16,8 @@ public class Lobby {
   // ATTRIBUTES
 
   @Id
-  private Long lobbyId;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   // METHODS
 
