@@ -29,8 +29,8 @@ public class GameController {
   }
 
   @GetMapping
-  public List<Game> getGame(){
-    return gameService.getGame();
+  public List<Game> getGames(){
+    return gameService.getGames();
   }
 
   @GetMapping("/cards")

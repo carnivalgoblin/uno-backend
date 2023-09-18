@@ -32,7 +32,8 @@ public class Game {
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private Player currentPlayer = new Player();
 
-  private Boolean clockwiseRotation = true;
+  private Boolean reverse = true;
+
 
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private CardDeck drawDeck = new CardDeck();
@@ -48,5 +49,14 @@ public class Game {
 
   public Game(String testGame) {
     this.gameName = testGame;
+  }
+
+  public Player getPlayerById(Long id) {
+    for (Player player : players) {
+      if (player.getId().equals(id)) {
+        return player;
+      }
+    }
+    return null;
   }
 }

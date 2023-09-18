@@ -2,11 +2,13 @@ package com.allianztalents.unobackend.service;
 
 import com.allianztalents.unobackend.entity.Card;
 import com.allianztalents.unobackend.entity.CardDeck;
+import com.allianztalents.unobackend.entity.Player;
 import com.allianztalents.unobackend.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -32,13 +34,7 @@ public class DeckService {
 
     public CardDeck shuffleDeck(CardDeck deck) {
         //Mischen
-        deck.getCards().sort((o1, o2) -> {
-            if (Math.random() < 0.5) {
-                return -1;
-            } else {
-                return 1;
-            }
-        });
+        Collections.shuffle(deck.getCards());
 
         return deck;
     }
@@ -51,6 +47,12 @@ public class DeckService {
         deck.getCards().removeAll(hand);
 
         return hand;
+    }
+
+    public void placeCardOnDeckAndRemoveonPlayer(CardDeck deck, Card card, Player player) {
+        //Karte auf den Ablagestapel legen und aus der Hand löschen
+        deck.getCards().add(new Card(card));
+        player.getCards().remove(card);
     }
 
     public List<Card> getAllCards() {

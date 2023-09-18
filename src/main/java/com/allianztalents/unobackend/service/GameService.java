@@ -4,14 +4,10 @@ import com.allianztalents.unobackend.entity.*;
 import com.allianztalents.unobackend.entity.enumeration.RuleName;
 import com.allianztalents.unobackend.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.ErrorResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -21,14 +17,16 @@ public class GameService {
   private final DeckService deckService;
   private final ValidationService validationService;
 
-  public Game insert(Game _game){
-    return gameRepository.save(_game);
-  }
-
-  public List<Game> getGame(){
+  public List<Game> getGames(){
     return gameRepository.findAll();
   }
 
+  /**
+   * Erstellt ein neues Spiel
+   * @param players Liste der Spieler, die am Spiel teilnehmen
+   * @param rules Liste der Regeln, die für das Spiel gelten
+   * @return Game
+   */
   public Game createGame(List<Player> players, List<Rule> rules) {
 
     Game game = new Game();
@@ -36,10 +34,13 @@ public class GameService {
     game.setGameName("UNO 4 WINNERS");
     game.setRules(rules);
     game.setPlayers(players);
+
+    //Erster Spieler ist der aktuelle Spieler
     game.setCurrentPlayer(players.get(0));
+
     game.setTurns(new ArrayList<>());
     game.setWinner(null);
-    game.setClockwiseRotation(true);
+    game.setReverse(false);
     game.setDrawDeck(deckService.initializeDeck());
     game.setDeployDeck(new CardDeck());
 
@@ -49,64 +50,98 @@ public class GameService {
             .map(Rule::getRuleValue)
             .orElse(7);
 
-    game.getPlayers().forEach(player -> {
-      player.setCards(deckService.dealCards(game.getDrawDeck(),  startCardsValue));
-    });
+    game.getPlayers().forEach(player -> player.setCards(deckService.dealCards(game.getDrawDeck(),  startCardsValue)));
+
+    game.getDeployDeck().setCards(deckService.dealCards(game.getDrawDeck(), 1));
 
     return gameRepository.save(game);
-  }
-
-  public Game joinGame(Long gameId, Player player) {
-
-    return null; // temporary
   }
 
 
   /**
     @param gameId Id des Spiels, in dem eine Karte gespielt werden soll
-    @param playerId Id des Spielers, der eine Karte spielen möchte
-    @param card Karte, die gespielt werden soll
+    @param cardId ID von der Karte, die gespielt werden soll
     @return Game
     @throws Exception wenn die Karte nicht gespielt werden kann.
    **/
-  public Game playCard(Long gameId, Long playerId, Card card) throws Exception {
+  public Game playCard(Long gameId, Long cardId) throws Exception {
 
     Game game = gameRepository.findById(gameId).orElseThrow();
 
     // Annahme: validateTurn gibt einen gültigen Turn zurück, der hinzugefügt werden soll.
-    Turn validatedTurn = validationService.validateTurn(game, card);
+    Turn validatedTurn = validationService.validateTurn(game, deckService.getCardById(cardId));
 
     // Füge den validierten Turn zur Liste "turns" in "game" hinzu
     game.getTurns().add(validatedTurn);
+
+    deckService.placeCardOnDeckAndRemoveonPlayer(game.getDeployDeck(), deckService.getCardById(cardId), game.getPlayerById(game.getCurrentPlayer().getId()));
+
+    //Setze den nächsten Spieler!!!
+    game.setCurrentPlayer(determineNextPlayer(game));
 
     return gameRepository.save(game);
   }
 
   /**
    @param gameId Id des Spiels, in dem eine Karte gezogen werden soll
-   @param playerId Id des Spielers, der eine Karte ziehen möchte
    @return Game
    @throws Exception wenn die Karte nicht gezogen werden kann.
   **/
-  public Game drawCard(Long gameId, Long playerId) throws Exception {
+  public Game drawCard(Long gameId, int cardamount) throws Exception {
 
     Game game = gameRepository.findById(gameId).orElseThrow();
 
-    Turn validatedTurn = validationService.validateDrawTurn(game);
+    List<Card> cards = deckService.dealCards(game.getDrawDeck(), cardamount);
 
-    //Der player zieht eine Karte vom obersten CardDeck des games
-    Card card = new Card(game.getDrawDeck().getCards().get(0));
-    game.getDrawDeck().getCards().remove(0);
+    // Annahme: createDrawTurn gibt einen vorgefüllten Turn zurück, der hinzugefügt werden soll.
+    Turn turn = validationService.createDrawTurn(game, cards);
 
+    // Füge den vorgefüllten Turn zur Liste "turns" in "game" hinzu
+    game.getTurns().add(turn);
 
-    game.getPlayers().stream()
-            .filter(p -> Objects.equals(p.getId(), playerId))
-            .findFirst().orElseThrow()
-            .getCards().add(card);
+    // Füge die gezogene Karte(n) zur Liste "cards" in "player" hinzu
+    game.getPlayerById(game.getCurrentPlayer().getId()).getCards().addAll(cards);
 
-    game.getTurns().add(validatedTurn);
+    //Setze den nächsten Spieler!!!
+    game.setCurrentPlayer(determineNextPlayer(game));
 
     return gameRepository.save(game) ;
   }
 
+  /**
+   * Die Funktion findet den nächsten Spieler, der an der Reihe ist.
+   * @param game Game, in dem gespielt wird
+   * @return Player, der als nächstes an der Reihe ist
+   * @throws Exception Es wurde keine letzte Karte gefunden
+   */
+  private Player determineNextPlayer(Game game) throws Exception {
+    Card lastCard = ValidationService.validateLastPlayedCard(game);
+
+    Player currentPlayer = game.getCurrentPlayer();
+
+    int nextplayerindex= 1;
+
+    // check if last turn was a skip or reverse
+    switch (lastCard.getSpecialEffect()) {
+      case SKIP -> // skip next
+        nextplayerindex = 2;
+      case REVERSE -> // before
+        game.setReverse(!game.getReverse());
+    }
+
+    if (game.getReverse()) {
+      if (game.getPlayers().indexOf(currentPlayer) == 0) {
+        return game.getPlayers().get(game.getPlayers().size() - nextplayerindex);
+      } else {
+        return game.getPlayers().get(game.getPlayers().indexOf(currentPlayer) - nextplayerindex);
+      }
+    } else {
+      if (game.getPlayers().indexOf(currentPlayer) == game.getPlayers().size() - nextplayerindex) {
+        return game.getPlayers().get(0);
+      } else {
+        return game.getPlayers().get(game.getPlayers().indexOf(currentPlayer) + nextplayerindex);
+      }
+
+    }
+  }
 }

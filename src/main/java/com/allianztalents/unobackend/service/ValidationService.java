@@ -3,12 +3,11 @@ package com.allianztalents.unobackend.service;
 import com.allianztalents.unobackend.entity.Card;
 import com.allianztalents.unobackend.entity.Game;
 import com.allianztalents.unobackend.entity.Turn;
-import com.allianztalents.unobackend.entity.enumeration.Color;
-import com.allianztalents.unobackend.entity.enumeration.Numeration;
 import com.allianztalents.unobackend.entity.enumeration.SpecialEffect;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -28,13 +27,14 @@ public class ValidationService {
 
         turn.setCard(card);
 
-        Card lastValidCard = validateLastCard(game);
+        Card lastValidCard = validateLastPlayedCard(game);
 
         turn.setCard(validateCard(card, lastValidCard));
 
         turn.setPlayer(game.getCurrentPlayer());
 
         turn.setIsDrawn(false);
+        turn.setIsSkipped(false);
 
         return turn;
     }
@@ -44,15 +44,16 @@ public class ValidationService {
      * @param game Game, in dem gespielt wird
      * @return Turn, indem die Karte null ist und isDrawn true ist
      */
-    public Turn validateDrawTurn(Game game) {
+    public Turn createDrawTurn(Game game, List<Card> cards) {
 
         Turn turn = new Turn();
 
-        turn.setCard(null);
+        turn.setCards(cards);
 
         turn.setPlayer(game.getCurrentPlayer());
 
         turn.setIsDrawn(true);
+        turn.setIsSkipped(false);
 
         return turn;
     }
@@ -63,9 +64,10 @@ public class ValidationService {
      * @return Card, die zuletzt gespielt wurde
      * @throws Exception Es wurde keine letzte Karte gefunden
      */
-    public Card validateLastCard(Game game) throws Exception {
+    public static Card validateLastPlayedCard(Game game) throws Exception {
         Optional<Turn> lastNotDrawnTurn = game.getTurns().stream()
             .filter(turn -> !turn.getIsDrawn())
+            .filter(turn -> !turn.getIsSkipped())
             .reduce((first, second) -> second);
 
         Turn turn;
@@ -77,7 +79,7 @@ public class ValidationService {
             throw new Exception("No last Card found");
         }
 
-        return turn.getCard();
+        return turn.getFirstCard();
     }
 
     /**
@@ -88,8 +90,7 @@ public class ValidationService {
      * @throws Exception Karte nicht spielbar
      */
     public Card validateCard(Card card, Card lastValidCard) throws Exception {
-//TODO WENN ES EIN AUSSETZEN IST DARF NICHT GEZOGEN WERDEN
-        if (card.getColor().equals(lastValidCard.getColor()) || card.getNumeration().equals(lastValidCard.getNumeration())) {
+        if (card.getColor().equals(lastValidCard.getColor()) || card.getNumeration().equals(lastValidCard.getNumeration()) || card.getSpecialEffect().equals(lastValidCard.getSpecialEffect())) {
             System.out.println("Card possible to play");
             return card;
         } else if (card.getSpecialEffect().equals(SpecialEffect.COLOR_WISH) || card.getSpecialEffect().equals(SpecialEffect.DRAW_FOUR_COLOR_WISH)) {
@@ -99,6 +100,4 @@ public class ValidationService {
             throw new Exception("Card is not possible to play");
         }
     }
-
-
 }

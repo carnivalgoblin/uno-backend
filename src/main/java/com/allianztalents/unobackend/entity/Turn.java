@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 
@@ -17,8 +20,17 @@ public class Turn {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Player player = new Player();
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Card card = new Card();
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Card> cards = new ArrayList<>();
 
     private Boolean isDrawn;
+    private Boolean isSkipped;
+
+    public Card getFirstCard () {
+        return cards.get(0);
+    }
+
+    public void setCard (Card card) {
+        cards.add(card);
+    }
 }
