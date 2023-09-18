@@ -21,17 +21,21 @@ public class UnoCard {
     private Numeration numeration;
     private Color color;
     private SpecialEffect specialEffect;
+    private boolean played = false;
+    private String pictureString;
 
     public UnoCard(Color color, Numeration numeration) {
         this.color = color;
         this.numeration = numeration;
         this.specialEffect = null;
+        this.pictureString = color.name() + "-" + numeration.name();
     }
 
     public UnoCard(Color color, SpecialEffect specialEffect) {
         this.color = color;
         this.numeration = Numeration.SPECIAL_EFFECT;
         this.specialEffect = specialEffect;
+        this.pictureString = color.name() + "-" + specialEffect.name();
     }
 
 }
