@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum SpecialEffect {
     SKIP("Skip"),
     DRAW_TWO("Draw 2+"),
-    DRAW_FOUR("Draw 4+"),
+    DRAW_FOUR_COLOR_WISH("Draw 4+ Color Wish"),
     COLOR_WISH("Color Wish"),
     REVERSE("Reverse");
 

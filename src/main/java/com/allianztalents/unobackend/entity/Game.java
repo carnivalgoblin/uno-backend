@@ -27,7 +27,7 @@ public class Game {
   private Player winner = new Player();
 
   @OneToMany(fetch = FetchType.EAGER)
-  private List<Player> players;
+  private List<Player> players = new ArrayList<>();
 
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private Player currentPlayer = new Player();

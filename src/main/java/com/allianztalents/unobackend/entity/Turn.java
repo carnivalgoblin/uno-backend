@@ -1,6 +1,11 @@
 package com.allianztalents.unobackend.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 
 @Entity
 public class Turn {
@@ -14,4 +19,6 @@ public class Turn {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Card card = new Card();
+
+    private Boolean isDrawn;
 }

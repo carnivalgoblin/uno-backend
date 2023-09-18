@@ -5,14 +5,16 @@ import com.allianztalents.unobackend.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.ErrorResponse;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class GameService {
 
-  @Autowired
   private GameRepository gameRepository;
   private DeckService deckService;
   private ValidationService validationService;
@@ -42,14 +44,36 @@ public class GameService {
     return null; // temporary
   }
 
-  public Game playCard(Long gameId, Long playerId, Card card) {
+  public Game playCard(Long gameId, Long playerId, Card card) throws Exception {
 
-    return null; // temporary
+    Game game = gameRepository.findById(gameId).orElseThrow();
+
+    // Annahme: validateTurn gibt einen gültigen Turn zurück, der hinzugefügt werden soll.
+    Turn validatedTurn = validationService.validateTurn(game, card);
+
+    // Füge den validierten Turn zur Liste "turns" in "game" hinzu
+    game.getTurns().add(validatedTurn);
+
+    return gameRepository.save(game);
   }
 
-  public Game drawCard(Long gameId, Long playerId) {
+  public Game drawCard(Long gameId, Long playerId) throws Exception {
 
-    return null; // temporary
+    Game game = gameRepository.findById(gameId).orElseThrow();
+
+    Turn validatedTurn = validationService.validateDrawTurn(game);
+
+    //Der player zieht eine Karte vom obersten CardDeck des games
+    Card card = game.getDrawDeck().getCards().get(0);
+
+    game.getPlayers().stream()
+            .filter(p -> Objects.equals(p.getId(), playerId))
+            .findFirst().orElseThrow()
+            .getCards().add(card);
+
+    game.getTurns().add(validatedTurn);
+
+    return gameRepository.save(game) ;
   }
 
 }
