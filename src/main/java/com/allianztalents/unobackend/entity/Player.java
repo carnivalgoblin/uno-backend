@@ -17,7 +17,8 @@ public class Player {
   // ATTRIBUTES
 
   @Id
-  private Long playerId;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   private String name;
 

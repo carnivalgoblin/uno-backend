@@ -1,25 +1,26 @@
 package com.allianztalents.unobackend.controller;
 
 import com.allianztalents.unobackend.entity.Game;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
+import com.allianztalents.unobackend.service.GameService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+
+@RestController
+@RequestMapping("/uno")
+@RequiredArgsConstructor
 public class GameController {
+  private final GameService gameService;
 
-  @MessageMapping("/playCard")
-  @SendTo("/topic/game/{gameId}")
-  public Game playCard(@DestinationVariable Long gameId) {
-
-    return null; //temporary
+  @PostMapping
+  public Game startGame(@RequestBody Game _game){
+    return gameService.insert(_game);
   }
 
-  @MessageMapping("/drawCard")
-  @SendTo("/topic/game/{gameId}")
-  public Game drawCard(@DestinationVariable Long gameId) {
-
-    return null; //temporary
+  @GetMapping
+  public List<Game> getGame(){
+    return gameService.getGame();
   }
+
 }

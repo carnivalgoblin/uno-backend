@@ -6,9 +6,9 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Color {
-    BLAU("Blau"),
-    GRÜN("Grün"),
-    GELB("Gelb"),
-    ROT("Rot");
+    BLAU("Blue"),
+    GRÜN("Green"),
+    GELB("Yellow"),
+    ROT("Red");
     private final String colorName;
 }

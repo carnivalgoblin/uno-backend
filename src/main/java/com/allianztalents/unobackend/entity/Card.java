@@ -3,8 +3,7 @@ package com.allianztalents.unobackend.entity;
 import com.allianztalents.unobackend.entity.enumeration.Color;
 import com.allianztalents.unobackend.entity.enumeration.Numeration;
 import com.allianztalents.unobackend.entity.enumeration.SpecialEffect;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @NoArgsConstructor
@@ -14,24 +13,33 @@ import lombok.*;
 @ToString
 
 @Entity
-public class UnoCard {
+public class Card {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(value = EnumType.STRING)
     private Numeration numeration;
+
+    @Enumerated(value = EnumType.STRING)
     private Color color;
+
+    @Enumerated(value = EnumType.STRING)
     private SpecialEffect specialEffect;
+
     private boolean played = false;
+
     private String pictureString;
 
-    public UnoCard(Color color, Numeration numeration) {
+    public Card(Color color, Numeration numeration) {
         this.color = color;
         this.numeration = numeration;
         this.specialEffect = null;
         this.pictureString = color.name() + "-" + numeration.name();
     }
 
-    public UnoCard(Color color, SpecialEffect specialEffect) {
+    public Card(Color color, SpecialEffect specialEffect) {
         this.color = color;
         this.numeration = Numeration.SPECIAL_EFFECT;
         this.specialEffect = specialEffect;

@@ -2,7 +2,7 @@ package com.allianztalents.unobackend.service;
 
 import com.allianztalents.unobackend.entity.Game;
 import com.allianztalents.unobackend.entity.Player;
-import com.allianztalents.unobackend.entity.UnoCard;
+import com.allianztalents.unobackend.entity.Card;
 import com.allianztalents.unobackend.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,15 @@ public class GameService {
   @Autowired
   private GameRepository gameRepository;
 
+
+  public Game insert(Game _game){
+    return gameRepository.save(_game);
+  }
+
+  public List<Game> getGame(){
+    return gameRepository.findAll();
+  }
+
   public Game createGame(List<Player> players) {
 
     return null; // temporary
@@ -27,7 +36,7 @@ public class GameService {
     return null; // temporary
   }
 
-  public Game playCard(Long gameId, Long playerId, UnoCard unoCard) {
+  public Game playCard(Long gameId, Long playerId, Card card) {
 
     return null; // temporary
   }
