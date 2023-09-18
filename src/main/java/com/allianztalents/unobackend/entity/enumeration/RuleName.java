@@ -6,6 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum RuleName {
-    STARTCARDS();
+    STARTCARDS()
 
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.ErrorResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,9 +17,9 @@ import java.util.Optional;
 @Service
 public class GameService {
 
-  private GameRepository gameRepository;
-  private DeckService deckService;
-  private ValidationService validationService;
+  private final GameRepository gameRepository;
+  private final DeckService deckService;
+  private final ValidationService validationService;
 
   public Game insert(Game _game){
     return gameRepository.save(_game);
@@ -32,10 +33,15 @@ public class GameService {
 
     Game game = new Game();
 
+    game.setGameName("UNO 4 WINNERS");
     game.setRules(rules);
     game.setPlayers(players);
-
-    List<Card> deck = deckService.initializeDeck();
+    game.setCurrentPlayer(players.get(0));
+    game.setTurns(new ArrayList<>());
+    game.setWinner(null);
+    game.setClockwiseRotation(true);
+    game.setDrawDeck(deckService.initializeDeck());
+    game.setDeployDeck(new CardDeck());
 
     int startCardsValue = game.getRules().stream()
             .filter(rule -> rule.getRuleName().equals(RuleName.STARTCARDS) && rule.getRuleActive())
@@ -44,12 +50,10 @@ public class GameService {
             .orElse(7);
 
     game.getPlayers().forEach(player -> {
-      player.setCards(deckService.dealCards(deck,  startCardsValue));
+      player.setCards(deckService.dealCards(game.getDrawDeck(),  startCardsValue));
     });
 
-    game.setDrawDeck((CardDeck) deck); //TODO Check which argument has to be used for this method
-
-    return null;
+    return gameRepository.save(game);
   }
 
   public Game joinGame(Long gameId, Player player) {

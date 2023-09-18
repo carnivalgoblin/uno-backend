@@ -26,7 +26,7 @@ public class Game {
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private Player winner = new Player();
 
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Player> players = new ArrayList<>();
 
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -40,13 +40,13 @@ public class Game {
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private CardDeck deployDeck = new CardDeck();
 
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Turn> turns = new ArrayList<>();
 
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Rule> rules = new ArrayList<>();
 
-
-  // METHODS
-
+  public Game(String testGame) {
+    this.gameName = testGame;
+  }
 }

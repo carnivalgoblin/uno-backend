@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+
+  # uno-database
+  schiffeversenken-database:
+    image: postgres:latest
+    container_name: uno-database
+    ports:
+      - 5432:5432
+    environment:
+      TZ: Europe/Berlin
+      POSTGRES_USER: uno
+      POSTGRES_PASSWORD: uno
+      POSTGRES_DB: uno
+    restart: unless-stopped

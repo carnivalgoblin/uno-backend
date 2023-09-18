@@ -1,10 +1,12 @@
 package com.allianztalents.unobackend.service;
 
 import com.allianztalents.unobackend.entity.Card;
+import com.allianztalents.unobackend.entity.CardDeck;
 import com.allianztalents.unobackend.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -13,22 +15,24 @@ public class DeckService {
     @Autowired
     private CardRepository cardRepository;
 
-    public List<Card> initializeDeck() {
+    public CardDeck initializeDeck() {
         //Liste mit doppeltem Kartensatz erstellen und mischen
 
-        List<Card> deck = cardRepository.findAll();
-        deck.addAll(cardRepository.findAll());
+        CardDeck deck = new CardDeck();
+
+        List<Card> cards = new ArrayList<>(cardRepository.findAll());
+
+        deck.setCards(cards);
 
         //Mischen
-
         deck = shuffleDeck(deck);
 
         return deck;
     }
 
-    public List<Card> shuffleDeck(List<Card> deck) {
+    public CardDeck shuffleDeck(CardDeck deck) {
         //Mischen
-        deck.sort((o1, o2) -> {
+        deck.getCards().sort((o1, o2) -> {
             if (Math.random() < 0.5) {
                 return -1;
             } else {
@@ -40,10 +44,11 @@ public class DeckService {
     }
 
     // nun bekommen die spieler ihre karten
-    public List<Card> dealCards(List<Card> deck, int numberOfCards) {
+    public List<Card> dealCards(CardDeck deck, int numberOfCards) {
         //Karten austeilen
-        List<Card> hand = deck.subList(0, numberOfCards);
-        deck.removeAll(hand);
+        List<Card> hand = new ArrayList<>(deck.getCards().subList(0, numberOfCards));
+
+        deck.getCards().removeAll(hand);
 
         return hand;
     }

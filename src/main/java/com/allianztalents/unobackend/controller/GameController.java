@@ -1,7 +1,10 @@
 package com.allianztalents.unobackend.controller;
 
+import com.allianztalents.unobackend.dto.GameCreateDTO;
 import com.allianztalents.unobackend.entity.Game;
 import com.allianztalents.unobackend.entity.Card;
+import com.allianztalents.unobackend.entity.Player;
+import com.allianztalents.unobackend.entity.Rule;
 import com.allianztalents.unobackend.service.DeckService;
 import com.allianztalents.unobackend.service.GameService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +21,11 @@ public class GameController {
   private final DeckService deckService;
 
   @PostMapping
-  public Game startGame(@RequestBody Game _game){
-    return gameService.insert(_game);
+  public Game createGame(@RequestBody GameCreateDTO gameCreateDTO){
+    List<Player> players = gameCreateDTO.getPlayers();
+    List<Rule> rules = gameCreateDTO.getRules();
+
+    return gameService.createGame(players, rules);
   }
 
   @GetMapping

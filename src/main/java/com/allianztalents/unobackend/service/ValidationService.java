@@ -15,8 +15,6 @@ import java.util.Optional;
 @Service
 public class ValidationService {
 
-    private final GameService gameService;
-
     public Turn validateTurn(Game game, Card card) throws Exception {
 
         Turn turn = new Turn();
