@@ -6,7 +6,7 @@ import com.allianztalents.unobackend.service.DeckService;
 import com.allianztalents.unobackend.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
+
 
 import java.util.List;
 
@@ -33,7 +33,8 @@ public class GameController {
   }
 
   @GetMapping("/cards/{cardId}")
-  public Card getCardById(@Valid @PathVariable("cardId") long id){
+  //TODO Check @Valid und später hinzufügen
+  public Card getCardById(@PathVariable("cardId") long id){
     return deckService.getCardById(id);
   }
 
