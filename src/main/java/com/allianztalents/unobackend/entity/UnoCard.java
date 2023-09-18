@@ -3,9 +3,21 @@ package com.allianztalents.unobackend.entity;
 import com.allianztalents.unobackend.entity.enumeration.Color;
 import com.allianztalents.unobackend.entity.enumeration.Numeration;
 import com.allianztalents.unobackend.entity.enumeration.SpecialEffect;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.*;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
+@ToString
+
+@Entity
 public class UnoCard {
-    private int id;
+
+    @Id
+    private Long id;
     private Numeration numeration;
     private Color color;
     private SpecialEffect specialEffect;
