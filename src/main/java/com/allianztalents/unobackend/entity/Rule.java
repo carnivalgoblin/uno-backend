@@ -1,5 +1,6 @@
 package com.allianztalents.unobackend.entity;
 
+import com.allianztalents.unobackend.entity.enumeration.RuleName;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,4 +22,13 @@ public class Rule {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long ruleId;
 
+  private RuleName ruleName;
+
+  private String ruleDescription;
+
+  private Integer ruleValue;
+
+  private Boolean ruleActive;
+
+  // METHODS
 }

@@ -1,6 +1,7 @@
 package com.allianztalents.unobackend.service;
 
 import com.allianztalents.unobackend.entity.*;
+import com.allianztalents.unobackend.entity.enumeration.RuleName;
 import com.allianztalents.unobackend.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,25 @@ public class GameService {
     return gameRepository.findAll();
   }
 
-  public Game createGame(List<Player> players) {
+  public Game createGame(List<Player> players, List<Rule> rules) {
 
     Game game = new Game();
 
+    game.setRules(rules);
     game.setPlayers(players);
 
     List<Card> deck = deckService.initializeDeck();
+
+    int startCardsValue = game.getRules().stream()
+            .filter(rule -> rule.getRuleName().equals(RuleName.STARTCARDS) && rule.getRuleActive())
+            .findFirst()
+            .map(Rule::getRuleValue)
+            .orElse(7);
+
+    game.getPlayers().forEach(player -> {
+      player.setCards(deckService.dealCards(deck,  startCardsValue));
+    });
+
     game.setDrawDeck((CardDeck) deck); //TODO Check which argument has to be used for this method
 
     return null;

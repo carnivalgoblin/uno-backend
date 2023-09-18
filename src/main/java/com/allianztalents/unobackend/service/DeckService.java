@@ -14,7 +14,38 @@ public class DeckService {
     private CardRepository cardRepository;
 
     public List<Card> initializeDeck() {
-        return null;
+        //Liste mit doppeltem Kartensatz erstellen und mischen
+
+        List<Card> deck = cardRepository.findAll();
+        deck.addAll(cardRepository.findAll());
+
+        //Mischen
+
+        deck = shuffleDeck(deck);
+
+        return deck;
+    }
+
+    public List<Card> shuffleDeck(List<Card> deck) {
+        //Mischen
+        deck.sort((o1, o2) -> {
+            if (Math.random() < 0.5) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
+
+        return deck;
+    }
+
+    // nun bekommen die spieler ihre karten
+    public List<Card> dealCards(List<Card> deck, int numberOfCards) {
+        //Karten austeilen
+        List<Card> hand = deck.subList(0, numberOfCards);
+        deck.removeAll(hand);
+
+        return hand;
     }
 
     public List<Card> getAllCards() {
