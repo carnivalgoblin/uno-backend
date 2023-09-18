@@ -46,4 +46,13 @@ public class Card {
         this.pictureString = color.name() + "-" + specialEffect.name();
     }
 
+    public Card(Card card){
+        this.id = card.getId();
+        this.numeration = card.getNumeration();
+        this.color = card.getColor();
+        this.specialEffect = card.getSpecialEffect();
+        this.played = card.isPlayed();
+        this.pictureString = card.getPictureString();
+    }
+
 }

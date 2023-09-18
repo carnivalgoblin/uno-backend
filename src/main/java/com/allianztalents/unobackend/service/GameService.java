@@ -61,6 +61,14 @@ public class GameService {
     return null; // temporary
   }
 
+
+  /**
+    @param gameId Id des Spiels, in dem eine Karte gespielt werden soll
+    @param playerId Id des Spielers, der eine Karte spielen möchte
+    @param card Karte, die gespielt werden soll
+    @return Game
+    @throws Exception wenn die Karte nicht gespielt werden kann.
+   **/
   public Game playCard(Long gameId, Long playerId, Card card) throws Exception {
 
     Game game = gameRepository.findById(gameId).orElseThrow();
@@ -74,6 +82,12 @@ public class GameService {
     return gameRepository.save(game);
   }
 
+  /**
+   @param gameId Id des Spiels, in dem eine Karte gezogen werden soll
+   @param playerId Id des Spielers, der eine Karte ziehen möchte
+   @return Game
+   @throws Exception wenn die Karte nicht gezogen werden kann.
+  **/
   public Game drawCard(Long gameId, Long playerId) throws Exception {
 
     Game game = gameRepository.findById(gameId).orElseThrow();
@@ -81,7 +95,9 @@ public class GameService {
     Turn validatedTurn = validationService.validateDrawTurn(game);
 
     //Der player zieht eine Karte vom obersten CardDeck des games
-    Card card = game.getDrawDeck().getCards().get(0);
+    Card card = new Card(game.getDrawDeck().getCards().get(0));
+    game.getDrawDeck().getCards().remove(0);
+
 
     game.getPlayers().stream()
             .filter(p -> Objects.equals(p.getId(), playerId))
