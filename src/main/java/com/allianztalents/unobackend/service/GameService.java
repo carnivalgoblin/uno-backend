@@ -3,6 +3,7 @@ package com.allianztalents.unobackend.service;
 import com.allianztalents.unobackend.entity.*;
 import com.allianztalents.unobackend.entity.enumeration.RuleName;
 import com.allianztalents.unobackend.repository.GameRepository;
+import com.allianztalents.unobackend.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class GameService {
 
   private final GameRepository gameRepository;
+  private final PlayerRepository playerRepository;
   private final DeckService deckService;
   private final ValidationService validationService;
 
@@ -23,11 +25,17 @@ public class GameService {
 
   /**
    * Erstellt ein neues Spiel
-   * @param players Liste der Spieler, die am Spiel teilnehmen
    * @param rules Liste der Regeln, die für das Spiel gelten
    * @return Game
    */
-  public Game createGame(List<Player> players, List<Rule> rules) {
+  public Game createGame(List<Rule> rules) {
+
+    int requiredPlayerCount = 4;
+    List<Player> players = playerRepository.findAll();
+
+    if (players.size() != requiredPlayerCount) {
+      throw new IllegalArgumentException("Es müssen " + requiredPlayerCount + " Spieler sein!");
+    }
 
     Game game = new Game();
 
@@ -141,5 +149,15 @@ public class GameService {
       }
 
     }
+  }
+
+  public Game addPlayers(Long gameId, List<Player> players) {
+
+    Game game = gameRepository.findById(gameId).orElseThrow();
+
+    game.setPlayers(players);
+
+    return gameRepository.save(game);
+
   }
 }

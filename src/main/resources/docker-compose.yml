@@ -2,7 +2,7 @@ version: "3.7"
 services:
 
   # uno-database
-  schiffeversenken-database:
+  uno-database:
     image: postgres:latest
     container_name: uno-database
     ports:

@@ -22,10 +22,15 @@ public class GameController {
 
   @PostMapping
   public Game createGame(@RequestBody GameCreateDTO gameCreateDTO){
-    List<Player> players = gameCreateDTO.getPlayers();
+//    List<Player> players = gameCreateDTO.getPlayers();
     List<Rule> rules = gameCreateDTO.getRules();
 
-    return gameService.createGame(players, rules);
+    return gameService.createGame(rules);
+  }
+
+  @PostMapping("/{gameId}/addPlayers")
+  public Game addPlayers(@RequestBody List<Player> players, @PathVariable("gameId") long gameId){
+    return gameService.addPlayers(gameId, players);
   }
 
   @GetMapping
