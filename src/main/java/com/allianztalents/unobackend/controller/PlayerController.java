@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+// ZU Websocket ändern, damit die player in realtime hinzugefügt werden können und auch abgerufen werden können
+
 @RestController
 @RequestMapping("/players")
 @RequiredArgsConstructor
