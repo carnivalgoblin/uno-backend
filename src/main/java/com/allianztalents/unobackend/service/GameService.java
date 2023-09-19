@@ -160,4 +160,8 @@ public class GameService {
     return gameRepository.save(game);
 
   }
+
+  public List<Player> getPlayers() {
+    return playerRepository.findAll();
+  }
 }

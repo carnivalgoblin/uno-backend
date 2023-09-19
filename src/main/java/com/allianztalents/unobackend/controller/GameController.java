@@ -28,11 +28,6 @@ public class GameController {
     return gameService.createGame(rules);
   }
 
-  @PostMapping("/{gameId}/addPlayers")
-  public Game addPlayers(@RequestBody List<Player> players, @PathVariable("gameId") long gameId){
-    return gameService.addPlayers(gameId, players);
-  }
-
   @GetMapping
   public List<Game> getGames(){
     return gameService.getGames();
