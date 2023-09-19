@@ -74,7 +74,7 @@ public class GameService {
     // Füge den validierten Turn zur Liste "turns" in "game" hinzu
     game.getTurns().add(validatedTurn);
 
-    deckService.placeCardOnDeckAndRemoveonPlayer(game.getDeployDeck(), deckService.getCardById(cardId), game.getPlayerById(game.getCurrentPlayer().getId()));
+    deckService.placeCardOnDeckAndRemoveOnPlayer(game.getDeployDeck(), deckService.getCardById(cardId), game.getPlayerById(game.getCurrentPlayer().getId()));
 
     //Setze den nächsten Spieler!!!
     game.setCurrentPlayer(determineNextPlayer(game));
