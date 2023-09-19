@@ -162,5 +162,7 @@ public class DatabasePopulator implements CommandLineRunner {
         cardRepository.save(new Card(Color.BLACK, SpecialEffect.COLOR_WISH));
         cardRepository.save(new Card(Color.BLACK, SpecialEffect.DRAW_FOUR_COLOR_WISH));
         cardRepository.save(new Card(Color.BLACK, SpecialEffect.COLOR_WISH));
+
+
     }
 }

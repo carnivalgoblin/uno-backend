@@ -49,9 +49,9 @@ public class DeckService {
         return hand;
     }
 
-    public void placeCardOnDeckAndRemoveonPlayer(CardDeck deck, Card card, Player player) {
+    public void placeCardOnDeckAndRemoveOnPlayer(CardDeck deck, Card card, Player player) {
         //Karte auf den Ablagestapel legen und aus der Hand löschen
-        deck.getCards().add(new Card(card));
+        deck.getCards().add(card);
         player.getCards().remove(card);
     }
 

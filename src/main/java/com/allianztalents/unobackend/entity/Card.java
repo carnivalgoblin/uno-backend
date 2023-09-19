@@ -11,6 +11,7 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
+@EqualsAndHashCode
 
 @Entity
 public class Card {
@@ -28,17 +29,17 @@ public class Card {
     @Enumerated(value = EnumType.STRING)
     private SpecialEffect specialEffect;
 
-    private boolean played = false;
-
     private String pictureString;
 
+    //Normal Card
     public Card(Color color, Numeration numeration) {
         this.color = color;
         this.numeration = numeration;
-        this.specialEffect = null;
+        this.specialEffect = SpecialEffect.NONE;
         this.pictureString = color.name() + "-" + numeration.name();
     }
 
+    //Special Card
     public Card(Color color, SpecialEffect specialEffect) {
         this.color = color;
         this.numeration = Numeration.SPECIAL_EFFECT;
@@ -51,7 +52,6 @@ public class Card {
         this.numeration = card.getNumeration();
         this.color = card.getColor();
         this.specialEffect = card.getSpecialEffect();
-        this.played = card.isPlayed();
         this.pictureString = card.getPictureString();
     }
 

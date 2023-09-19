@@ -62,9 +62,8 @@ public class ValidationService {
      * Die Funktion validiert, ob es eine letzte gültige Karte gibt.
      * @param game Game, in dem gespielt wird
      * @return Card, die zuletzt gespielt wurde
-     * @throws Exception Es wurde keine letzte Karte gefunden
      */
-    public static Card validateLastPlayedCard(Game game) throws Exception {
+    public static Card validateLastPlayedCard(Game game) {
         Optional<Turn> lastNotDrawnTurn = game.getTurns().stream()
             .filter(turn -> !turn.getIsDrawn())
             .filter(turn -> !turn.getIsSkipped())
@@ -76,7 +75,8 @@ public class ValidationService {
             System.out.println("Turn found");
             turn = lastNotDrawnTurn.get();
         } else {
-            throw new Exception("No last Card found");
+            System.out.println("Used first Deck Card to Validate");
+            return game.getDeployDeck().getCards().get(game.getDeployDeck().getCards().size() -1);
         }
 
         return turn.getFirstCard();

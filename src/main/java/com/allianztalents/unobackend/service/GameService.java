@@ -85,9 +85,8 @@ public class GameService {
   /**
    @param gameId Id des Spiels, in dem eine Karte gezogen werden soll
    @return Game
-   @throws Exception wenn die Karte nicht gezogen werden kann.
   **/
-  public Game drawCard(Long gameId, int cardamount) throws Exception {
+  public Game drawCard(Long gameId, int cardamount) {
 
     Game game = gameRepository.findById(gameId).orElseThrow();
 
@@ -112,9 +111,8 @@ public class GameService {
    * Die Funktion findet den nächsten Spieler, der an der Reihe ist.
    * @param game Game, in dem gespielt wird
    * @return Player, der als nächstes an der Reihe ist
-   * @throws Exception Es wurde keine letzte Karte gefunden
    */
-  private Player determineNextPlayer(Game game) throws Exception {
+  private Player determineNextPlayer(Game game) {
     Card lastCard = ValidationService.validateLastPlayedCard(game);
 
     Player currentPlayer = game.getCurrentPlayer();

@@ -33,13 +33,6 @@ public class SessionController {
         messagingTemplate.convertAndSend("/topic/game/" + gameId,  gameService.playCard(gameId, cardId));
     }
 
-//    @MessageMapping("/playCard")
-//    public Game playCard(@Payload Long cardId, Principal principal) throws Exception {
-//        Card playedCard = cardRepository.findById(cardId).orElse(null);
-//
-//        messagingTemplate.convertAndSend("/topic/gameUpdates", gameUpdate);
-//    }
-
     @MessageMapping("/{game}/drawCard")
     public void drawCard(@DestinationVariable Long gameId, @Payload int amount) throws Exception {
         messagingTemplate.convertAndSend("/topic/game/" + gameId,  gameService.drawCard(gameId, amount));
