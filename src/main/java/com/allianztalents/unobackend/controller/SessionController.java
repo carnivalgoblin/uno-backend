@@ -11,20 +11,23 @@ import org.springframework.stereotype.Controller;
 import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
 public class SessionController {
 
-    public GameService gameService;
+    public final GameService gameService;
 
-    @MessageMapping("/playCard")
-    @SendTo("/topic/game/{gameId}")
-    public Game playCard(@DestinationVariable Long gameId, @Payload Map<String, Object> payload) throws Exception {
-        Long cardId = (Long) payload.get("cardId");
-        return gameService.playCard(gameId, cardId);
+    private final SimpMessagingTemplate messagingTemplate;
+
+    private final CardRepository cardRepository;
+
+    // eig noch /app/gameId/playCard
+    @MessageMapping("/{gameId}/playCard")
+    public void playCard(@DestinationVariable Long gameId, @Payload Long cardId) throws Exception {
+        messagingTemplate.convertAndSend("/topic/game/" + gameId,  gameService.playCard(gameId, cardId));
     }
 
-    @MessageMapping("/drawCard")
-    @SendTo("/topic/game/{gameId}")
-    public Game drawCard(@DestinationVariable Long gameId, int amount) throws Exception {
-        return gameService.drawCard(gameId, amount);
+    @MessageMapping("/{game}/drawCard")
+    public void drawCard(@DestinationVariable Long gameId, @Payload int amount) throws Exception {
+        messagingTemplate.convertAndSend("/topic/game/" + gameId,  gameService.drawCard(gameId, amount));
     }
 }

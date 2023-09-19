@@ -29,7 +29,7 @@ public class ValidationService {
 
         Card lastValidCard = validateLastPlayedCard(game);
 
-        turn.setCard(validateCard(card, lastValidCard));
+        turn.setCard(validateCardAgainstCard(card, lastValidCard));
 
         turn.setPlayer(game.getCurrentPlayer());
 
@@ -89,7 +89,7 @@ public class ValidationService {
      * @return Card, die Validiert wurde und gespielt werden darf
      * @throws Exception Karte nicht spielbar
      */
-    public Card validateCard(Card card, Card lastValidCard) throws Exception {
+    public Card validateCardAgainstCard(Card card, Card lastValidCard) throws Exception {
         if (card.getColor().equals(lastValidCard.getColor()) || card.getNumeration().equals(lastValidCard.getNumeration()) || card.getSpecialEffect().equals(lastValidCard.getSpecialEffect())) {
             System.out.println("Card possible to play");
             return card;
