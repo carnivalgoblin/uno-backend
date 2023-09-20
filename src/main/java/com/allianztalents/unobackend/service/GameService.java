@@ -5,8 +5,10 @@ import com.allianztalents.unobackend.entity.enumeration.RuleName;
 import com.allianztalents.unobackend.repository.GameRepository;
 import com.allianztalents.unobackend.repository.PlayerRepository;
 import com.allianztalents.unobackend.repository.RuleRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,7 @@ public class GameService {
    * Erstellt ein neues Spiel
    * @return Game
    */
+  @Transactional
   public Game createGame() {
 
     int requiredPlayerCount = 4;
@@ -58,17 +61,26 @@ public class GameService {
     game.setDrawDeck(deckService.initializeDeck());
     game.setDeployDeck(new CardDeck());
 
+
+
     int startCardsValue = game.getRules().stream()
             .filter(rule -> rule.getRuleName().equals(RuleName.STARTCARDS) && rule.getRuleActive())
             .findFirst()
             .map(Rule::getRuleValue)
             .orElse(7);
 
-    game.getPlayers().forEach(player -> player.setCards(deckService.dealCards(game.getDrawDeck(),  startCardsValue)));
+
+    game = gameRepository.save(game);
+
+    CardDeck drawDeck = game.getDrawDeck();
+
+    game.getPlayers().forEach(player -> player.setCards(deckService.dealCards(drawDeck,  startCardsValue)));
 
     game.getDeployDeck().setCards(deckService.dealCards(game.getDrawDeck(), 1));
 
-    return gameRepository.save(game);
+    game = gameRepository.save(game);
+
+    return game;
   }
 
 

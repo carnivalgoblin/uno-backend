@@ -41,10 +41,18 @@ public class DeckService {
 
     // nun bekommen die spieler ihre karten
     public List<Card> dealCards(CardDeck deck, int numberOfCards) {
-        //Karten austeilen
-        List<Card> hand = new ArrayList<>(deck.getCards().subList(0, numberOfCards));
+        // Karten austeilen
+        List<Card> hand = new ArrayList<>();
 
-        deck.getCards().removeAll(hand);
+        for (int i = 0; i < numberOfCards; i++) {
+            if (!deck.getCards().isEmpty()) {
+                Card card = deck.getCards().remove(0); // Entferne die erste Karte aus dem Deck
+                hand.add(card); // Füge die Karte zur Hand hinzu
+            } else {
+                // Das Deck ist leer, keine weiteren Karten können ausgeteilt werden
+                break;
+            }
+        }
 
         return hand;
     }

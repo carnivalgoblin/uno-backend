@@ -23,7 +23,7 @@ public class Game {
 
   private String gameName;
 
-  @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
   private Player winner;
 
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
