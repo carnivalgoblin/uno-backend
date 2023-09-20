@@ -5,6 +5,7 @@ import com.allianztalents.unobackend.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class PlayerController {
   private final GameService gameService;
 
   @MessageMapping("/addPlayer")
+  @SendTo("/topic/addPlayer")
   public int addPlayer(@Payload Player player){
 
     gameService.addPlayer(player);
