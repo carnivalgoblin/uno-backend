@@ -23,10 +23,7 @@ public class GameController {
 
   @PostMapping
   public Game createGame(@RequestBody GameCreateDTO gameCreateDTO){
-//    List<Player> players = gameCreateDTO.getPlayers();
-    List<Rule> rules = gameCreateDTO.getRules();
-
-    return gameService.createGame(rules);
+    return gameService.createGame();
   }
 
   @GetMapping
