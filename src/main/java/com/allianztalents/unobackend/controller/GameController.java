@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("/uno")
 @RequiredArgsConstructor
 public class GameController {
+
   private final GameService gameService;
   private final DeckService deckService;
 
@@ -42,6 +43,11 @@ public class GameController {
   //TODO Check @Valid und später hinzufügen
   public Card getCardById(@PathVariable("cardId") long id){
     return deckService.getCardById(id);
+  }
+
+  @GetMapping("/players")
+  public List<Player> getAllPlayers(){
+    return gameService.getPlayers();
   }
 
 }
