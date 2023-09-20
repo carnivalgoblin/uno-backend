@@ -5,7 +5,7 @@ import com.allianztalents.unobackend.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -15,21 +15,20 @@ import java.util.List;
 public class PlayerController {
 
   private final GameService gameService;
+  private final SimpMessagingTemplate messagingTemplate;
 
   @MessageMapping("/addPlayer")
-  @SendTo("/topic/addPlayer")
-  public int addPlayer(@Payload Player player){
+  public void addPlayer(@Payload String playerName){
 
-    gameService.addPlayer(player);
+    gameService.addPlayer(playerName);
 
-    return gameService.getNumberOfPlayers();
+    messagingTemplate.convertAndSend("/topic/lobby",  gameService.getPlayers());
   }
 
   @MessageMapping("/getPlayers")
-  public List<Player> getAllPlayers() {
-    List<Player> players = gameService.getPlayers();
+  public void getAllPlayers() {
 
-    return players;
+    messagingTemplate.convertAndSend("/topic/lobby",  gameService.getPlayers());
   }
 
 }

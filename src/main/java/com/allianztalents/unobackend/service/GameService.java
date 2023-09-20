@@ -161,8 +161,10 @@ public class GameService {
 
   }
 
-  public Player addPlayer(Player player) {
-    return playerRepository.save(player);
+  public Player addPlayer(String playername) {
+    Player newPlayer = new Player(playername);
+
+    return playerRepository.save(newPlayer);
   }
 
   public List<Player> getPlayers() {
