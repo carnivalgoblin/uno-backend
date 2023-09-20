@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class DatabasePopulator implements CommandLineRunner {
 
-    private CardRepository cardRepository;
-    private GameRepository gameRepository;
-    private PlayerRepository playerRepository;
+    private final CardRepository cardRepository;
+    private final GameRepository gameRepository;
+    private final PlayerRepository playerRepository;
 
     @Autowired
     public DatabasePopulator(CardRepository cardRepository, GameRepository gameRepository, PlayerRepository playerRepository) {
