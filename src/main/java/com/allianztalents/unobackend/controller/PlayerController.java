@@ -1,7 +1,6 @@
 package com.allianztalents.unobackend.controller;
 
 import com.allianztalents.unobackend.entity.Player;
-import com.allianztalents.unobackend.repository.PlayerRepository;
 import com.allianztalents.unobackend.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -15,7 +14,6 @@ import java.util.List;
 public class PlayerController {
 
   private final GameService gameService;
-  private final PlayerRepository playerRepository;
 
   @MessageMapping("/addPlayer")
   public int addPlayer(@Payload Player player){

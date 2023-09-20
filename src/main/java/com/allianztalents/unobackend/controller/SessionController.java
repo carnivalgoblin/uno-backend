@@ -15,10 +15,7 @@ import org.springframework.stereotype.Controller;
 public class SessionController {
 
     public final GameService gameService;
-
     private final SimpMessagingTemplate messagingTemplate;
-
-    private final CardRepository cardRepository;
 
     // eig noch /app/gameId/playCard
     @MessageMapping("/{gameId}/playCard")

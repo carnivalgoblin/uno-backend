@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("/uno")
 @RequiredArgsConstructor
 public class GameController {
+
   private final GameService gameService;
   private final DeckService deckService;
 
