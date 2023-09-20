@@ -1,7 +1,6 @@
 package com.allianztalents.unobackend.helpers;
 
 import com.allianztalents.unobackend.entity.Card;
-import com.allianztalents.unobackend.entity.Game;
 import com.allianztalents.unobackend.entity.Player;
 import com.allianztalents.unobackend.entity.enumeration.Color;
 import com.allianztalents.unobackend.entity.enumeration.Numeration;

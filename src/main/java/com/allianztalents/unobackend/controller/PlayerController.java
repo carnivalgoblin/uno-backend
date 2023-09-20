@@ -7,12 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-
-// ZU Websocket ändern, damit die player in realtime hinzugefügt werden können und auch abgerufen werden können
 
 @Controller
 @RequiredArgsConstructor
@@ -28,14 +24,6 @@ public class PlayerController {
 
     return gameService.getNumberOfPlayers();
   }
-
-  // ADDING PLAYERS TO GAME BEFORE STARTING GAME NOT WORKING ANYMORE
-
-//  @PostMapping("/{gameId}/addPlayers")
-//  public Game addPlayers(@PathVariable("gameId") long gameId){
-//    List<Player> players = gameService.getPlayers();
-//    return gameService.addPlayers(gameId, players);
-//  }
 
   @MessageMapping("/getPlayers")
   public List<Player> getAllPlayers() {
