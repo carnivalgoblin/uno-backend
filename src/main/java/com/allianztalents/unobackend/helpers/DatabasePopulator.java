@@ -2,11 +2,13 @@ package com.allianztalents.unobackend.helpers;
 
 import com.allianztalents.unobackend.entity.Card;
 import com.allianztalents.unobackend.entity.Game;
+import com.allianztalents.unobackend.entity.Player;
 import com.allianztalents.unobackend.entity.enumeration.Color;
 import com.allianztalents.unobackend.entity.enumeration.Numeration;
 import com.allianztalents.unobackend.entity.enumeration.SpecialEffect;
 import com.allianztalents.unobackend.repository.CardRepository;
 import com.allianztalents.unobackend.repository.GameRepository;
+import com.allianztalents.unobackend.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -16,11 +18,13 @@ public class DatabasePopulator implements CommandLineRunner {
 
     private CardRepository cardRepository;
     private GameRepository gameRepository;
+    private PlayerRepository playerRepository;
 
     @Autowired
-    public DatabasePopulator(CardRepository cardRepository, GameRepository gameRepository) {
+    public DatabasePopulator(CardRepository cardRepository, GameRepository gameRepository, PlayerRepository playerRepository) {
         this.cardRepository = cardRepository;
         this.gameRepository = gameRepository;
+        this.playerRepository = playerRepository;
     }
 
 
@@ -163,6 +167,13 @@ public class DatabasePopulator implements CommandLineRunner {
         cardRepository.save(new Card(Color.BLACK, SpecialEffect.DRAW_FOUR_COLOR_WISH));
         cardRepository.save(new Card(Color.BLACK, SpecialEffect.COLOR_WISH));
 
+
+        //Players (Comment out if you want to start with empty player list)
+
+        playerRepository.save(new Player("Player 1"));
+        playerRepository.save(new Player("Player 2"));
+        playerRepository.save(new Player("Player 3"));
+        playerRepository.save(new Player("Player 4"));
 
     }
 }

@@ -44,4 +44,9 @@ public class GameController {
     return deckService.getCardById(id);
   }
 
+  @GetMapping("/players")
+  public List<Player> getAllPlayers(){
+    return gameService.getPlayers();
+  }
+
 }

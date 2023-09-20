@@ -33,9 +33,9 @@ public class GameService {
     int requiredPlayerCount = 4;
     List<Player> players = playerRepository.findAll();
 
-    if (players.size() != requiredPlayerCount) {
-      throw new IllegalArgumentException("Es müssen " + requiredPlayerCount + " Spieler sein!");
-    }
+//    if (players.size() != requiredPlayerCount) {
+//      throw new IllegalArgumentException("Es müssen " + requiredPlayerCount + " Spieler sein!");
+//    }
 
     Game game = new Game();
 
@@ -161,7 +161,15 @@ public class GameService {
 
   }
 
+  public Player addPlayer(Player player) {
+    return playerRepository.save(player);
+  }
+
   public List<Player> getPlayers() {
     return playerRepository.findAll();
   }
+
+  public int getNumberOfPlayers() {
+    return playerRepository.findAll().size();
+    }
 }

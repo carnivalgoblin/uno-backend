@@ -1,11 +1,12 @@
 package com.allianztalents.unobackend.controller;
 
-import com.allianztalents.unobackend.entity.Game;
 import com.allianztalents.unobackend.entity.Player;
 import com.allianztalents.unobackend.repository.PlayerRepository;
 import com.allianztalents.unobackend.service.GameService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,18 +14,19 @@ import java.util.List;
 
 // ZU Websocket ändern, damit die player in realtime hinzugefügt werden können und auch abgerufen werden können
 
-@RestController
-@RequestMapping("/players")
+@Controller
 @RequiredArgsConstructor
 public class PlayerController {
 
   private final GameService gameService;
   private final PlayerRepository playerRepository;
 
-  @PostMapping
-  public Player addPlayer(@RequestBody Player player){
+  @MessageMapping("/addPlayer")
+  public int addPlayer(@Payload Player player){
 
-    return playerRepository.save(player);
+    gameService.addPlayer(player);
+
+    return gameService.getNumberOfPlayers();
   }
 
   // ADDING PLAYERS TO GAME BEFORE STARTING GAME NOT WORKING ANYMORE
@@ -35,10 +37,11 @@ public class PlayerController {
 //    return gameService.addPlayers(gameId, players);
 //  }
 
-  @GetMapping
-  public List<Player> getPlayers(){
+  @MessageMapping("/getPlayers")
+  public List<Player> getAllPlayers() {
+    List<Player> players = gameService.getPlayers();
 
-    return playerRepository.findAll();
+    return players;
   }
 
 }

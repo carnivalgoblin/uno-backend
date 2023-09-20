@@ -27,4 +27,9 @@ public class Player {
 
   private Integer points;
 
+  public Player(String name) {
+    this.name = name;
+    this.points = 0;
+  }
+
 }
