@@ -32,4 +32,10 @@ public class GameController {
     Game game = gameService.createGame();
     messagingTemplate.convertAndSend("/topic/game/" , game);
   }
+
+  @MessageMapping("/getGame/{gameId}")
+  public void getGame(@DestinationVariable Long gameId){
+    Game game = gameService.getGameById(gameId);
+    messagingTemplate.convertAndSend("/topic/game/"  + gameId, game);
+  }
 }

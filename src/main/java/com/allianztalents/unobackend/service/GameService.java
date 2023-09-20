@@ -24,6 +24,9 @@ public class GameService {
   public List<Game> getGames(){
     return gameRepository.findAll();
   }
+  public Game getGameById(Long gameId){
+    return gameRepository.findById(gameId).orElse(null);
+  }
 
   /**
    * Erstellt ein neues Spiel
