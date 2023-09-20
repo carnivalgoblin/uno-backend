@@ -35,7 +35,7 @@ public class GameController {
 
   @MessageMapping("/getGame/{gameId}")
   public void getGame(@DestinationVariable Long gameId){
-    Game game = gameService.getGames().get(0);
+    Game game = gameService.getGameById(gameId);
     messagingTemplate.convertAndSend("/topic/game/"  + gameId, game);
   }
 }
