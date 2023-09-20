@@ -30,7 +30,7 @@ public class GameController {
   @MessageMapping("/startGame")
   public void createGame(){
     Game game = gameService.createGame();
-    messagingTemplate.convertAndSend("/topic/game/" , game);
+    messagingTemplate.convertAndSend("/topic/game" , game);
   }
 
   @MessageMapping("/getGame/{gameId}")
