@@ -23,14 +23,16 @@ public class GameController {
   }
 
   @MessageMapping("/{gameId}/drawCard")
-  public void drawCard(@DestinationVariable Long gameId, @Payload int amount) throws Exception {
+  public void drawCard(@DestinationVariable Long gameId, @Payload int amount) {
     messagingTemplate.convertAndSend("/topic/game/" + gameId,  gameService.drawCard(gameId, amount));
   }
 
   @MessageMapping("/startGame")
   public void createGame(){
     Game game = gameService.createGame();
-    messagingTemplate.convertAndSend("/topic/game/" , game);
+
+    Game gamesend = gameService.getGameById(game.getId());
+    messagingTemplate.convertAndSend("/topic/game" , gamesend);
   }
 
   @MessageMapping("/getGame/{gameId}")

@@ -22,7 +22,7 @@ public class Player {
 
   private String name;
 
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   private List<Card> cards;
 
   private Integer points;
